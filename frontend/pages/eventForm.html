@@ -1,122 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Registration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Event Registration Form</h2>
-        <form action="submit_event.php" method="post">
-            <div class="form-group">
-                <label for="eventName">Event Name:</label>
-                <input type="text" id="eventName" name="eventName" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventDate">Date:</label>
-                <input type="date" id="eventDate" name="eventDate" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventTime">Time:</label>
-                <input type="time" id="eventTime" name="eventTime" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventLocation">Location:</label>
-                <input type="text" id="eventLocation" name="eventLocation" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventType">Event Type:</label>
-                <select id="eventType" name="eventType" required>
-                    <option value="conference">Conference</option>
-                    <option value="workshop">Workshop</option>
-                    <option value="webinar">Webinar</option>
-                    <option value="meetup">Meetup</option>
-                    <option value="seminar">Seminar</option>
-                    <option value="networking">Networking Event</option>
-                    <option value="trade_show">Trade Show</option>
-                    <option value="fundraiser">Fundraiser</option>
-                    <option value="hackathon">Hackathon</option>
-                    <option value="competition">Competition</option>
-                    <option value="birthday">Birthday Party</option>
-                    <option value="wedding">Wedding Ceremony</option>
-                    <option value="anniversary">Anniversary Celebration</option>
-                    <option value="festival">Festival Event</option>
-                    <option value="corporate">Corporate Gathering</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventCapacity">Maximum Participants:</label>
-                <input type="number" id="eventCapacity" name="eventCapacity" min="1" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="organizerName">Organizer Name:</label>
-                <input type="text" id="organizerName" name="organizerName" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="organizerEmail">Organizer Email:</label>
-                <input type="email" id="organizerEmail" name="organizerEmail" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventDescription">Description:</label>
-                <textarea id="eventDescription" name="eventDescription" rows="4" required></textarea>
-            </div>
-            
-            <button type="submit">Submit Event</button>
-        </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="../css/login.css" />
+  </head>
+  <body>
+    <!-- Logo -->
+    <div class="logo">
+      <a href="#">E<span>vento</span></a>
     </div>
-</body>
+
+    <!-- Registration Form Container -->
+    <div class="container">
+      <h2>Event Registration</h2>
+
+      <!-- Step 1 -->
+      <div id="form-part-1">
+        <input type="text" id="eventName" placeholder="Event Name" />
+        <span class="error-message" id="errorEventName"></span>
+
+        <input type="date" id="eventDate" />
+        <span class="error-message" id="errorEventDate"></span>
+
+        <input type="time" id="eventTime" />
+        <span class="error-message" id="errorEventTime"></span>
+
+        <input type="text" id="eventLocation" placeholder="Location" />
+        <span class="error-message" id="errorEventLocation"></span>
+
+        <select id="eventType">
+          <option value="" disabled selected>Select Event Type</option>
+          <option value="conference">Conference</option>
+          <option value="workshop">Workshop</option>
+          <option value="webinar">Webinar</option>
+          <option value="meetup">Meetup</option>
+        </select>
+        <span class="error-message" id="errorEventType"></span>
+
+        <button type="button" onclick="validateStep1()">Next</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="form-part-2" style="display: none">
+        <input type="text" id="organizerName" placeholder="Organizer Name" />
+        <span class="error-message" id="errorOrganizerName"></span>
+
+        <input type="email" id="organizerEmail" placeholder="Organizer Email" />
+        <span class="error-message" id="errorOrganizerEmail"></span>
+
+        <textarea
+          id="eventDescription"
+          rows="4"
+          placeholder="Event Description"
+        ></textarea>
+        <span class="error-message" id="errorEventDescription"></span>
+
+        <input
+          type="number"
+          id="eventMembers"
+          min="1"
+          placeholder="Number of Members"
+        />
+        <span class="error-message" id="errorEventMembers"></span>
+
+        <button type="button" onclick="validateStep2()">Generate PDF</button>
+      </div>
+    </div>
+
+    <script>
+      function validateStep1() {
+        let isValid = true;
+
+        isValid &= validateInput(
+          "eventName",
+          "errorEventName",
+          "Event Name is required!"
+        );
+        isValid &= validateInput(
+          "eventDate",
+          "errorEventDate",
+          "Event Date is required!"
+        );
+        isValid &= validateInput(
+          "eventTime",
+          "errorEventTime",
+          "Event Time is required!"
+        );
+        isValid &= validateInput(
+          "eventLocation",
+          "errorEventLocation",
+          "Event Location is required!"
+        );
+        isValid &= validateSelect(
+          "eventType",
+          "errorEventType",
+          "Please select an Event Type!"
+        );
+
+        if (isValid) {
+          document.getElementById("form-part-1").style.display = "none";
+          document.getElementById("form-part-2").style.display = "block";
+        }
+      }
+
+      function validateStep2() {
+        let isValid = true;
+
+        isValid &= validateInput(
+          "organizerName",
+          "errorOrganizerName",
+          "Organizer Name is required!"
+        );
+        isValid &= validateInput(
+          "organizerEmail",
+          "errorOrganizerEmail",
+          "Organizer Email is required!"
+        );
+        isValid &= validateInput(
+          "eventDescription",
+          "errorEventDescription",
+          "Event Description is required!"
+        );
+        isValid &= validateInput(
+          "eventMembers",
+          "errorEventMembers",
+          "Number of Members is required!"
+        );
+
+        if (isValid) {
+          generatePDF();
+        }
+      }
+
+      function validateInput(inputId, errorId, message) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+
+        if (input.value.trim() === "") {
+          error.textContent = message;
+          input.style.borderColor = "red";
+          return false;
+        } else {
+          error.textContent = "";
+          input.style.borderColor = "";
+          return true;
+        }
+      }
+
+      function validateSelect(selectId, errorId, message) {
+        const select = document.getElementById(selectId);
+        const error = document.getElementById(errorId);
+
+        if (select.value === "") {
+          error.textContent = message;
+          select.style.borderColor = "red";
+          return false;
+        } else {
+          error.textContent = "";
+          select.style.borderColor = "";
+          return true;
+        }
+      }
+
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const eventName = document.getElementById("eventName").value;
+        const eventDate = document.getElementById("eventDate").value;
+        const eventTime = document.getElementById("eventTime").value;
+        const eventLocation = document.getElementById("eventLocation").value;
+        const eventType = document.getElementById("eventType").value;
+        const organizerName = document.getElementById("organizerName").value;
+        const organizerEmail = document.getElementById("organizerEmail").value;
+        const eventDescription =
+          document.getElementById("eventDescription").value;
+        const eventMembers = document.getElementById("eventMembers").value;
+
+        const eventPrices = {
+          conference: 5000,
+          workshop: 3000,
+          webinar: 2000,
+          meetup: 1000,
+        };
+        const eventPrice = eventPrices[eventType] || 1500;
+
+        doc.setFontSize(18);
+        doc.text("Event Registration Details", 20, 20);
+
+        doc.setFontSize(12);
+        doc.text(`Event Name: ${eventName}`, 20, 40);
+        doc.text(`Date: ${eventDate}`, 20, 50);
+        doc.text(`Time: ${eventTime}`, 20, 60);
+        doc.text(`Location: ${eventLocation}`, 20, 70);
+        doc.text(`Type: ${eventType}`, 20, 80);
+        doc.text(`Organizer: ${organizerName}`, 20, 90);
+        doc.text(`Email: ${organizerEmail}`, 20, 100);
+        doc.text(`Description: ${eventDescription}`, 20, 110);
+        doc.text(`Members: ${eventMembers}`, 20, 120);
+        doc.text(`Price: ₹${eventPrice}`, 20, 130);
+
+        doc.save("Event_Details.pdf");
+      }
+    </script>
+
+    <style>
+      .error-message {
+        color: red;
+        font-size: 12px;
+        margin-bottom: 5px;
+        display: block;
+      }
+    </style>
+  </body>
 </html>

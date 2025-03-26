@@ -3,7 +3,8 @@ let navbar = document.querySelector(".navbar");
 const getStarted = document.getElementById("get-started");
 const authBtns = document.querySelector(".auth-btn");
 
-const isLoggedIn = true;
+const isLoggedIn = localStorage.getItem("token");
+// const isLoggedIn = true;
 
 if (isLoggedIn) {
   authBtns.style.display = "none";
@@ -38,6 +39,38 @@ var swiper = new Swiper(".home-slider", {
   loop: true,
   autoplay: {
     delay: 2000,
+    disableOnInteraction: false,
+  },
+});
+
+var swiper = new Swiper(".review-slider", {
+  // effect: "coverflow",
+  grabCursor: true,
+  // centeredSlides: true,
+  // slidesPerView: "auto",
+  // coverflowEffect: {
+  //   rotate: 0,
+  //   stretch: 0,
+  //   depth: 100,
+  //   modifier: 1,
+  //   slideShadows: true,
+  // },
+  slidesPerView: 1,
+  loop: true,
+  spaceBetween: 10,
+  breakpoints: {
+    0: {
+      slidesPerView: 1,
+    },
+    700: {
+      slidesPerView: 2,
+    },
+    1050: {
+      slidesPerView: 3,
+    },
+  },
+  autoplay: {
+    delay: 5000,
     disableOnInteraction: false,
   },
 });
